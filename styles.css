@@ -182,7 +182,7 @@ img{ max-width:100%; display:block; }
 /* ---------- archivio ---------- */
 .archive{ position:relative; padding:clamp(4.5rem,9vw,7.5rem) var(--pad); border-top:1px solid var(--rule); overflow:hidden; }
 .archive__bg{ position:absolute; inset:0; z-index:0; background:url('archive.png') center / cover no-repeat; animation:haze 32s ease-in-out infinite; }
-.archive__veil{ position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom, #070D08 0%, rgba(7,13,8,0.84) 16%, rgba(7,13,8,0.82) 84%, #070D08 100%); }
+.archive__veil{ position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom, #070D08 0%, rgba(7,13,8,0.84) 16%, rgba(7,13,8,0.82) 65%, #070D08 100%); }
 .archive__inner{ position:relative; z-index:2; max-width:var(--maxw); margin:0 auto; }
 .archive__head{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1.25rem; margin-bottom:2.75rem; }
 .archive__head .title{ margin-bottom:0; }
