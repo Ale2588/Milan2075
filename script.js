@@ -142,7 +142,21 @@
     }
   }
 
-  /* ---------- 5. Form: conteggio parole, upload immagine, validazione, invio ---------- */
+  /* ---------- 5. Form: conteggio parole, upload immagine, Supabase, invio ---------- */
+
+  // ————————————————————————————————
+  // SOSTITUISCI QUESTI DUE VALORI
+  var SUPABASE_URL = 'https://Milan2075.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_0Hjh4fs3JY5SkNDC2qBUCg_Ubl44hls';
+  // ————————————————————————————————
+
+  var sbClient = null;
+  try {
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch(e) {
+    console.warn('Supabase non inizializzato:', e);
+  }
+
   var form = document.getElementById('vision-form');
   var textarea = document.getElementById('visione');
   var wordcount = document.getElementById('wordcount');
@@ -246,12 +260,55 @@
       var w = countWords(textarea ? textarea.value : '');
       if (w < MIN_WORDS) { showError('Scrivi almeno qualche riga — la tua visione conta.'); return; }
       if (w > MAX_WORDS) { showError('La visione supera le 150 parole. Accorciala un po.'); return; }
+      if (!sbClient) { showError('Errore di connessione. Riprova tra poco.'); return; }
 
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Invio in corso...'; }
       if (errorBox) errorBox.hidden = true;
-      if (submitBtn) submitBtn.hidden = true;
-      if (successBox) successBox.hidden = false;
-      visionCount += 1;
-      setVisionDisplay(visionCount);
+
+      var file = imgInput && imgInput.files && imgInput.files[0];
+
+      function salvaVisione(imgUrl) {
+        var payload = {
+          nome: (document.getElementById('nome') || {}).value || null,
+          eta: parseInt((document.getElementById('eta') || {}).value) || null,
+          email: (document.getElementById('email') || {}).value || null,
+          telefono: (document.getElementById('telefono') || {}).value || null,
+          quartiere: (document.getElementById('quartiere') || {}).value || null,
+          tema: (document.getElementById('tema') || {}).value || null,
+          testo: textarea.value.trim(),
+          immagine_url: imgUrl || null,
+          consent_community: !!(document.getElementById('consent-community') || {}).checked,
+          consent_followup: !!(document.getElementById('consent-followup') || {}).checked,
+          approvata: false
+        };
+
+        sbClient.from('visioni').insert(payload).then(function(res) {
+          if (res.error) {
+            showError('Errore nel salvataggio. Riprova.');
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Invia la tua visione →'; }
+          } else {
+            if (submitBtn) submitBtn.hidden = true;
+            if (successBox) successBox.hidden = false;
+            visionCount += 1;
+            setVisionDisplay(visionCount);
+          }
+        });
+      }
+
+      if (file) {
+        var ext = file.name.split('.').pop();
+        var path = 'visione-' + Date.now() + '.' + ext;
+        sbClient.storage.from('visioni-immagini').upload(path, file, { upsert: false }).then(function(res) {
+          if (res.error) {
+            salvaVisione(null);
+          } else {
+            var pub = sbClient.storage.from('visioni-immagini').getPublicUrl(path);
+            salvaVisione(pub.data.publicUrl);
+          }
+        });
+      } else {
+        salvaVisione(null);
+      }
     });
   }
 })();
