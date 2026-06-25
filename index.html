@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milano 2075 — The Long Shot</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sand: #F2EDE4;
+    --sand-dark: #E8E0D3;
+    --ink: #1A1714;
+    --ink-soft: #3D3830;
+    --ochre: #B5823A;
+    --ochre-light: #D4A05A;
+    --warm-mid: #8C7B65;
+    --rule: rgba(26,23,20,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--sand);
+    color: var(--ink);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--sand);
+    border-bottom: 0.5px solid var(--rule);
+    padding: 0 2rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    color: var(--ochre);
+  }
+
+  .nav-cta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    text-decoration: none;
+    border: 0.5px solid var(--ochre);
+    padding: 6px 16px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nav-cta:hover {
+    background: var(--ochre);
+    color: var(--sand);
+  }
+
+  /* HERO */
+  .hero {
+    padding-top: 52px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 0.5px;
+    background: var(--ochre);
+  }
+
+  .hero-headline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--ochre);
+  }
+
+  .hero-question {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    border-left: 1.5px solid var(--ochre);
+    padding-left: 1.25rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--sand);
+    text-decoration: none;
+    padding: 14px 28px;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--ochre); }
+
+  .btn-secondary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 14px 0;
+    border-bottom: 0.5px solid var(--warm-mid);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .btn-secondary:hover { color: var(--ochre); border-color: var(--ochre); }
+
+  .hero-counter {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 0.5px solid var(--rule);
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .counter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .counter-n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .counter-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+  }
+
+  /* SECTIONS */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+    border-top: 0.5px solid var(--rule);
+  }
+
+  .section-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    margin-top: 3rem;
+  }
+
+  .step {
+    background: var(--sand-dark);
+    padding: 2rem 1.5rem;
+  }
+
+  .step-n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--ochre);
+    margin-bottom: 1rem;
+  }
+
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .step-body {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* VISION CARDS */
+  .visions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .vision-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    color: var(--warm-mid);
+    letter-spacing: 0.05em;
+  }
+
+  .visions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2px;
+  }
+
+  .vision-card {
+    background: white;
+    padding: 1.75rem 1.5rem;
+    position: relative;
+    transition: background 0.15s;
+  }
+
+  .vision-card:hover { background: #FFFCF8; }
+
+  .vision-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1rem;
+  }
+
+  .vision-text {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  .vision-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 0.5px solid var(--rule);
+  }
+
+  .vision-author {
+    font-size: 12px;
+    color: var(--warm-mid);
+    letter-spacing: 0.04em;
+  }
+
+  .vision-year {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ochre);
+    letter-spacing: 0.1em;
+  }
+
+  /* FORM */
+  .form-section {
+    background: var(--ink);
+    max-width: none;
+    padding: 6rem 2rem;
+    border-top: none;
+  }
+
+  .form-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .form-section .section-eyebrow { color: var(--ochre-light); }
+  .form-section .section-title { color: var(--sand); }
+
+  .form-subtitle {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(242,237,228,0.6);
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .form-field label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(242,237,228,0.5);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: rgba(242,237,228,0.06);
+    border: 0.5px solid rgba(242,237,228,0.2);
+    color: var(--sand);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  .form-field input::placeholder,
+  .form-field textarea::placeholder { color: rgba(242,237,228,0.25); }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: var(--ochre);
+  }
+
+  .form-field select option { background: var(--ink); }
+
+  .form-field textarea { resize: vertical; min-height: 140px; }
+
+  .char-count {
+    font-size: 11px;
+    color: rgba(242,237,228,0.3);
+    text-align: right;
+  }
+
+  .btn-submit {
+    width: 100%;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--ochre);
+    color: var(--sand);
+    border: none;
+    padding: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .btn-submit:hover { background: var(--ochre-light); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-body {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  .about-body p + p { margin-top: 1.25rem; }
+
+  .about-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .about-link-item {
+    padding-bottom: 1.5rem;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .about-link-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+    margin-bottom: 6px;
+  }
+
+  .about-link-url {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ochre);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .about-link-url:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--rule);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--warm-mid);
+  }
+
+  /* TIMELINE BAR */
+  .timeline-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 4rem;
+    border-top: 0.5px solid var(--rule);
+    padding-top: 2rem;
+    overflow-x: auto;
+  }
+
+  .tl-item {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+    padding: 0 0.5rem;
+  }
+
+  .tl-year {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .tl-year.active { color: var(--ochre); }
+
+  .tl-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rule);
+    margin: 6px auto;
+  }
+
+  .tl-dot.active { background: var(--ochre); }
+
+  .tl-label {
+    font-size: 10px;
+    color: var(--warm-mid);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 640px) {
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-counter { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">The Long <span>Shot</span> · Milano 2075</a>
+  <a class="nav-cta" href="#invia">Invia la tua visione</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Milano · Elezioni 2027 · The Long Shot</div>
+  <h1 class="hero-headline">Che città<br>sarà <em>Milano</em><br>nel 2075?</h1>
+  <p class="hero-question">
+    Non un programma elettorale. Non una promessa.<br>
+    Una domanda aperta a chiunque voglia pensare oltre il presente.
+  </p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#invia">Condividi la tua visione</a>
+    <a class="btn-secondary" href="#visioni">Leggi le visioni →</a>
+  </div>
+
+  <div class="hero-counter">
+    <div class="counter-item">
+      <span class="counter-n">47</span>
+      <span class="counter-label">Visioni raccolte</span>
+    </div>
+    <div class="counter-item">
+      <span class="counter-n">12</span>
+      <span class="counter-label">Quartieri</span>
+    </div>
+    <div class="counter-item">
+      <span class="counter-n">50</span>
+      <span class="counter-label">Anni di orizzonte</span>
+    </div>
+    <div class="counter-item">
+      <span class="counter-n">2026</span>
+      <span class="counter-label">Stagione in corso</span>
+    </div>
+  </div>
+</div>
+
+<!-- COME FUNZIONA -->
+<section>
+  <div class="section-eyebrow">Come funziona</div>
+  <h2 class="section-title">Un archivio di idee<br>per la città che verrà.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">01 / Immagina</div>
+      <div class="step-title">La tua visione</div>
+      <div class="step-body">Scrivi come immagini Milano tra cinquant'anni. Un'idea, un'immagine, una direzione. Non servono certezze — serve pensiero lungo.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">02 / Invia</div>
+      <div class="step-title">Al nostro archivio</div>
+      <div class="step-body">Compila il form qui sotto. Poche domande, spazio per la tua idea. La redazione di The Long Shot legge tutto.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">03 / Entra</div>
+      <div class="step-title">Nella mappa</div>
+      <div class="step-body">Le visioni selezionate vengono pubblicate in questo archivio, curate e — dove possibile — portate all'attenzione pubblica e politica.</div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIONI -->
+<section id="visioni">
+  <div class="visions-header">
+    <div>
+      <div class="section-eyebrow">L'archivio</div>
+      <h2 class="section-title">Le visioni<br>dei milanesi.</h2>
+    </div>
+    <div class="vision-count">47 visioni pubblicate</div>
+  </div>
+
+  <div class="visions-grid">
+    <div class="vision-card">
+      <div class="vision-tag">Mobilità</div>
+      <p class="vision-text">Milano senza automobile privata entro il 2050. Non per divieto, ma perché il trasporto pubblico sarà talmente buono da rendere l'auto un peso, non un privilegio.</p>
+      <div class="vision-meta">
+        <span class="vision-author">M.R. · Porta Romana</span>
+        <span class="vision-year">→ 2075</span>
+      </div>
+    </div>
+
+    <div class="vision-card">
+      <div class="vision-tag">Spazio pubblico</div>
+      <p class="vision-text">Il verde non come ornamento ma come infrastruttura. Ogni quartiere con il suo bosco urbano, ogni cortile come polmone. Una città che respira anche d'estate.</p>
+      <div class="vision-meta">
+        <span class="vision-author">S.B. · Isola</span>
+        <span class="vision-year">→ 2075</span>
+      </div>
+    </div>
+
+    <div class="vision-card">
+      <div class="vision-tag">Cultura</div>
+      <p class="vision-text">Una città dove le istituzioni culturali non competono con Amsterdam o Londra, ma diventano il modello. Il talento viene qui perché qui si costruisce — non solo si espone.</p>
+      <div class="vision-meta">
+        <span class="vision-author">A.C. · Brera</span>
+        <span class="vision-year">→ 2075</span>
+      </div>
+    </div>
+
+    <div class="vision-card">
+      <div class="vision-tag">Abitare</div>
+      <p class="vision-text">Soluzioni abitative accessibili non come politica sociale ma come scelta urbanistica. Una città in cui si può crescere, invecchiare e tornare senza dover emigrare per il costo della vita.</p>
+      <div class="vision-meta">
+        <span class="vision-author">F.M. · Corvetto</span>
+        <span class="vision-year">→ 2075</span>
+      </div>
+    </div>
+
+    <div class="vision-card">
+      <div class="vision-tag">Economia</div>
+      <p class="vision-text">Milano come laboratorio europeo per il lavoro post-industriale: non più uffici ma ecosistemi. La città che produce idee diventa anche la città che le realizza.</p>
+      <div class="vision-meta">
+        <span class="vision-author">L.V. · Bicocca</span>
+        <span class="vision-year">→ 2075</span>
+      </div>
+    </div>
+
+    <div class="vision-card">
+      <div class="vision-tag">Comunità</div>
+      <p class="vision-text">Milano ritrova i suoi quartieri come unità di senso. Non periferie da integrare ma comunità da riconoscere. La città policentrica è già qui — manca solo il coraggio di governarla così.</p>
+      <div class="vision-meta">
+        <span class="vision-author">G.T. · Niguarda</span>
+        <span class="vision-year">→ 2075</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="invia">
+  <div class="form-inner">
+    <div class="section-eyebrow">Invia la tua visione</div>
+    <h2 class="section-title">Come immagini<br>Milano nel 2075?</h2>
+    <p class="form-subtitle">Non serve una risposta completa. Basta un pensiero onesto su dove vorremmo arrivare — e il coraggio di scriverlo.</p>
+
+    <form onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="nome">Nome (opzionale)</label>
+          <input type="text" id="nome" placeholder="Il tuo nome o le iniziali">
+        </div>
+        <div class="form-field">
+          <label for="eta">Età</label>
+          <input type="number" id="eta" placeholder="Es. 34" min="14" max="99">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="quartiere">Quartiere di Milano</label>
+        <select id="quartiere">
+          <option value="" disabled selected>Seleziona il tuo quartiere</option>
+          <option>Centro storico</option>
+          <option>Brera / Moscova</option>
+          <option>Isola / Porta Garibaldi</option>
+          <option>Porta Romana / Navigli</option>
+          <option>Bicocca / Niguarda</option>
+          <option>Corvetto / Porta Vittoria</option>
+          <option>Lambrate / Città Studi</option>
+          <option>Lorenteggio / Famagosta</option>
+          <option>Viale Monza / Turro</option>
+          <option>Altro / Hinterland</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="tema">Tema principale</label>
+        <select id="tema">
+          <option value="" disabled selected>Di cosa parla la tua visione?</option>
+          <option>Mobilità e trasporti</option>
+          <option>Spazio pubblico e verde</option>
+          <option>Abitare e costo della vita</option>
+          <option>Cultura e identità</option>
+          <option>Economia e lavoro</option>
+          <option>Comunità e periferie</option>
+          <option>Clima e ambiente</option>
+          <option>Istituzioni e democrazia</option>
+          <option>Altro</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="visione">La tua visione <span style="opacity:0.4; font-weight:300; text-transform:none; letter-spacing:0;">(max 150 parole)</span></label>
+        <textarea id="visione" placeholder="Scrivi qui la tua idea su come potrebbe — o dovrebbe — essere Milano tra cinquant'anni." oninput="updateCount(this)"></textarea>
+        <div class="char-count" id="char-count">0 / 150 parole</div>
+      </div>
+
+      <button type="submit" class="btn-submit">Invia la tua visione →</button>
+    </form>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section>
+  <div class="about-grid">
+    <div>
+      <div class="section-eyebrow">Chi siamo</div>
+      <h2 class="section-title">The Long Shot<br>è una comunità.</h2>
+      <div class="about-body">
+        <p>Fondata a Milano nel 2024, The Long Shot organizza conversazioni su ciò che definirà il nostro futuro nei prossimi 500 anni. Non siamo un think tank, non siamo un partito. Siamo un gruppo di persone che crede che il pensiero lungo sia una forma di azione politica.</p>
+        <p>Milano 2075 è il nostro contributo al dibattito cittadino in vista delle elezioni comunali. Un archivio di visioni che non vuole competere con i programmi elettorali, ma alimentare il pensiero di chi li scrive — e di chi li vota.</p>
+      </div>
+    </div>
+    <div class="about-links">
+      <div class="about-link-item">
+        <div class="about-link-label">Substack</div>
+        <a class="about-link-url" href="https://thelongshot2.substack.com">thelongshot2.substack.com</a>
+      </div>
+      <div class="about-link-item">
+        <div class="about-link-label">Scrivici</div>
+        <a class="about-link-url" href="mailto:thelongshot24@gmail.com">thelongshot24@gmail.com</a>
+      </div>
+      <div class="about-link-item">
+        <div class="about-link-label">Vuoi partecipare?</div>
+        <a class="about-link-url" href="mailto:thelongshot24@gmail.com">Chiedi un invito →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-bar">
+    <div class="tl-item">
+      <div class="tl-year active">2026</div>
+      <div class="tl-dot active"></div>
+      <div class="tl-label">Oggi</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2027</div>
+      <div class="tl-dot"></div>
+      <div class="tl-label">Elezioni</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2050</div>
+      <div class="tl-dot"></div>
+      <div class="tl-label">Clima</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2075</div>
+      <div class="tl-dot"></div>
+      <div class="tl-label">Orizzonte</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2100</div>
+      <div class="tl-dot"></div>
+      <div class="tl-label">Futuro</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">The Long Shot · Milan · Est. 2024</div>
+  <div class="footer-note">Milano 2075 è un'iniziativa editoriale indipendente.</div>
+</footer>
+
+<script>
+function updateCount(el) {
+  const words = el.value.trim() === '' ? 0 : el.value.trim().split(/\s+/).length;
+  const counter = document.getElementById('char-count');
+  counter.textContent = words + ' / 150 parole';
+  counter.style.color = words > 150 ? '#B5450A' : 'rgba(242,237,228,0.3)';
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.btn-submit');
+  const visione = document.getElementById('visione').value.trim();
+  const words = visione === '' ? 0 : visione.split(/\s+/).length;
+  if (!visione || words < 10) {
+    alert('Scrivi almeno qualche riga — la tua visione conta.');
+    return;
+  }
+  if (words > 150) {
+    alert('La visione supera le 150 parole. Accorciala un po\'.');
+    return;
+  }
+  btn.textContent = 'Grazie. La tua visione è stata inviata.';
+  btn.style.background = '#3B6D11';
+  btn.disabled = true;
+}
+</script>
+
+</body>
+</html>
