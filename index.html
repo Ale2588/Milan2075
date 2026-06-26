@@ -102,6 +102,37 @@
       </div>
       <div class="arch-count"><span id="arch-count">47</span> visioni pubblicate</div>
     </div>
+    <div class="archive__filters" id="archive-filters">
+      <div class="filter-group">
+        <span class="filter-label">Tema</span>
+        <div class="filter-btns" id="filter-tema">
+          <button class="filter-btn active" data-value="">Tutti</button>
+          <button class="filter-btn" data-value="Mobilità e trasporti">Mobilità</button>
+          <button class="filter-btn" data-value="Spazio pubblico e verde">Verde</button>
+          <button class="filter-btn" data-value="Abitare e costo della vita">Abitare</button>
+          <button class="filter-btn" data-value="Cultura e identità">Cultura</button>
+          <button class="filter-btn" data-value="Economia e lavoro">Economia</button>
+          <button class="filter-btn" data-value="Comunità e periferie">Comunità</button>
+          <button class="filter-btn" data-value="Clima e ambiente">Clima</button>
+          <button class="filter-btn" data-value="Istituzioni e democrazia">Istituzioni</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Zona</span>
+        <div class="filter-btns" id="filter-zona">
+          <button class="filter-btn active" data-value="">Tutte</button>
+          <button class="filter-btn" data-value="centro">Centro</button>
+          <button class="filter-btn" data-value="nord-est">Nord-est</button>
+          <button class="filter-btn" data-value="est">Est</button>
+          <button class="filter-btn" data-value="sud-est">Sud-est</button>
+          <button class="filter-btn" data-value="sud">Sud</button>
+          <button class="filter-btn" data-value="sud-ovest">Sud-ovest</button>
+          <button class="filter-btn" data-value="ovest">Ovest</button>
+          <button class="filter-btn" data-value="nord-ovest">Nord-ovest</button>
+          <button class="filter-btn" data-value="nord">Nord</button>
+        </div>
+      </div>
+    </div>
     <div class="visions" id="visions-container">
       <div class="visions__loading">Caricamento visioni…</div>
     </div>
@@ -143,7 +174,66 @@
         <label for="quartiere">Quartiere di Milano</label>
         <select id="quartiere" name="quartiere">
           <option value="" disabled selected>Seleziona il tuo quartiere</option>
-          <option>Centro storico</option><option>Brera / Moscova</option><option>Isola / Porta Garibaldi</option><option>Porta Romana / Navigli</option><option>Bicocca / Niguarda</option><option>Corvetto / Porta Vittoria</option><option>Lambrate / Città Studi</option><option>Lorenteggio / Famagosta</option><option>Viale Monza / Turro</option><option>Altro / Hinterland</option>
+          <optgroup label="Centro">
+            <option>Duomo / Centro Storico</option>
+            <option>Brera</option>
+            <option>Castello / Cairoli</option>
+            <option>Repubblica / Porta Nuova</option>
+          </optgroup>
+          <optgroup label="Nord-est">
+            <option>Isola / Garibaldi</option>
+            <option>Centrale / Stazione</option>
+            <option>Porta Venezia / Buenos Aires</option>
+            <option>NoLo / Loreto</option>
+            <option>Greco / Turro</option>
+            <option>Crescenzago / Adriano</option>
+            <option>Maggiolina</option>
+          </optgroup>
+          <optgroup label="Est">
+            <option>Città Studi / Lambrate</option>
+            <option>Ortica / Casoretto</option>
+            <option>Cimiano / Feltre</option>
+            <option>Naviglio Martesana</option>
+          </optgroup>
+          <optgroup label="Sud-est">
+            <option>Porta Romana</option>
+            <option>Lodi / Corvetto</option>
+            <option>Rogoredo / Santa Giulia</option>
+            <option>Vigentino / Chiaravalle</option>
+          </optgroup>
+          <optgroup label="Sud">
+            <option>Navigli / Darsena / Ticinese</option>
+            <option>Porta Genova / Tortona</option>
+            <option>Barona</option>
+            <option>Gratosoglio / Stadera</option>
+          </optgroup>
+          <optgroup label="Sud-ovest">
+            <option>Giambellino / Lorenteggio</option>
+            <option>Famagosta / Bisceglie</option>
+            <option>San Siro / Ippodromo</option>
+          </optgroup>
+          <optgroup label="Ovest">
+            <option>De Angeli / Wagner</option>
+            <option>Sempione / Fiera</option>
+            <option>CityLife / Portello</option>
+            <option>QT8 / Monte Stella</option>
+            <option>Gallaratese / Bonola</option>
+          </optgroup>
+          <optgroup label="Nord-ovest">
+            <option>Chinatown / Sarpi</option>
+            <option>Bovisa / Dergano</option>
+            <option>Certosa / Quarto Oggiaro</option>
+            <option>Vialba / Affori / Comasina</option>
+          </optgroup>
+          <optgroup label="Nord">
+            <option>Niguarda / Ca Granda</option>
+            <option>Bicocca</option>
+            <option>Zara / Maciachini</option>
+            <option>Bruzzano / Parco Nord</option>
+          </optgroup>
+          <optgroup label="—">
+            <option>Hinterland / Fuori Milano</option>
+          </optgroup>
         </select>
       </div>
       <div class="field">

@@ -176,6 +176,58 @@
     if (archCount) archCount.textContent = visioni.length;
   }
 
+  /* mappa zona → quartieri */
+  var ZONE_MAP = {
+    'centro': ['Duomo / Centro Storico','Brera','Castello / Cairoli','Repubblica / Porta Nuova'],
+    'nord-est': ['Isola / Garibaldi','Centrale / Stazione','Porta Venezia / Buenos Aires','NoLo / Loreto','Greco / Turro','Crescenzago / Adriano','Maggiolina'],
+    'est': ['Città Studi / Lambrate','Ortica / Casoretto','Cimiano / Feltre','Naviglio Martesana'],
+    'sud-est': ['Porta Romana','Lodi / Corvetto','Rogoredo / Santa Giulia','Vigentino / Chiaravalle'],
+    'sud': ['Navigli / Darsena / Ticinese','Porta Genova / Tortona','Barona','Gratosoglio / Stadera'],
+    'sud-ovest': ['Giambellino / Lorenteggio','Famagosta / Bisceglie','San Siro / Ippodromo'],
+    'ovest': ['De Angeli / Wagner','Sempione / Fiera','CityLife / Portello','QT8 / Monte Stella','Gallaratese / Bonola'],
+    'nord-ovest': ['Chinatown / Sarpi','Bovisa / Dergano','Certosa / Quarto Oggiaro','Vialba / Affori / Comasina'],
+    'nord': ['Niguarda / Ca Granda','Bicocca','Zara / Maciachini','Bruzzano / Parco Nord']
+  };
+
+  var tutteLeVisioni = [];
+  var filtroTema = '';
+  var filtroZona = '';
+
+  function applicaFiltri() {
+    var filtrate = tutteLeVisioni.filter(function(v) {
+      var okTema = !filtroTema || v.tema === filtroTema;
+      var okZona = !filtroZona || (ZONE_MAP[filtroZona] && ZONE_MAP[filtroZona].indexOf(v.quartiere) !== -1);
+      return okTema && okZona;
+    });
+    renderArchivio(filtrate);
+  }
+
+  /* bottoni filtro tema */
+  var filterTema = document.getElementById('filter-tema');
+  if (filterTema) {
+    filterTema.addEventListener('click', function(e) {
+      var btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filterTema.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      filtroTema = btn.dataset.value;
+      applicaFiltri();
+    });
+  }
+
+  /* bottoni filtro zona */
+  var filterZona = document.getElementById('filter-zona');
+  if (filterZona) {
+    filterZona.addEventListener('click', function(e) {
+      var btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filterZona.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      filtroZona = btn.dataset.value;
+      applicaFiltri();
+    });
+  }
+
   function caricaArchivio() {
     if (!sbClient) { if (visionsContainer) visionsContainer.innerHTML = '<p class="visions__empty">Errore connessione.</p>'; return; }
     sbClient.from('visioni').select('id,nome,quartiere,tema,testo,immagine_url,created_at')
@@ -183,17 +235,17 @@
       .order('created_at', { ascending: false })
       .then(function(res) {
         if (res.error) { console.error(res.error); return; }
-        var data = res.data || [];
-        renderArchivio(data);
+        tutteLeVisioni = res.data || [];
+        applicaFiltri();
 
-        /* aggiorna contatori hero con dati reali */
-        var n = data.length;
-        var quartieri = new Set(data.map(function(v) { return v.quartiere; }).filter(Boolean));
+        /* aggiorna contatori hero */
+        var n = tutteLeVisioni.length;
+        var quartieri = new Set(tutteLeVisioni.map(function(v) { return v.quartiere; }).filter(Boolean));
         visionCount = n;
         animateCount(n, 1700);
         var qEl = document.getElementById('qrt-count');
         if (qEl) {
-          var from = 0, dur = 1700, start = performance.now();
+          var dur = 1700, start = performance.now();
           var target = quartieri.size;
           if (!reduceMotion) {
             (function tick(now) {
@@ -311,8 +363,9 @@
             showError('Errore nel salvataggio. Riprova.');
             if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Invia la tua visione \u2192'; }
           } else {
+            if (submitBtn) submitBtn.hidden = true;
             if (successBox) successBox.hidden = false;
-            setTimeout(function() { location.reload(); }, 2000);
+            visionCount += 1; setVisionDisplay(visionCount);
           }
         });
       }

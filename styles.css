@@ -324,3 +324,14 @@ img{ max-width:100%; display:block; }
 .consent input[type="checkbox"]:checked + .consent__box::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #070d08;border-top:none;border-left:none;transform:rotate(45deg);}
 .consent__text{font-size:12px;color:rgba(232,245,208,0.55);line-height:1.65;}
 .consent:hover .consent__text{color:rgba(232,245,208,0.75);}
+
+/* =========================================================
+   FILTRI ARCHIVIO
+   ========================================================= */
+.archive__filters { margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.filter-group { display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.filter-label { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(183,242,76,0.4); padding-top: 7px; white-space: nowrap; min-width: 40px; }
+.filter-btns { display: flex; flex-wrap: wrap; gap: 4px; }
+.filter-btn { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 0.5px solid rgba(183,242,76,0.15); color: rgba(183,242,76,0.4); padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
+.filter-btn:hover { border-color: rgba(183,242,76,0.4); color: rgba(183,242,76,0.7); }
+.filter-btn.active { background: rgba(183,242,76,0.12); border-color: rgba(183,242,76,0.5); color: #b7f24c; }
