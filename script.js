@@ -146,7 +146,7 @@
 
   // ————————————————————————————————
   // SOSTITUISCI QUESTI DUE VALORI
-  var SUPABASE_URL = 'https://Milan2075.supabase.co';
+  var SUPABASE_URL = 'https://oqdszxrltgcptinkefjn.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_0Hjh4fs3JY5SkNDC2qBUCg_Ubl44hls';
   // ————————————————————————————————
 
