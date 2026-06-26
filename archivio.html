@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archivio Visioni — Milano 2075</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.archivio-hero { padding: 8rem 2rem 3rem; max-width: var(--maxw, 900px); margin: 0 auto; border-bottom: 0.5px solid rgba(183,242,76,0.1); }
+.archivio-hero .eyebrow { margin-bottom: 1rem; }
+.archivio-hero h1 { font-family: 'Instrument Serif', serif; font-size: clamp(36px, 5vw, 56px); color: #e8f5d0; line-height: 1.1; margin-bottom: 0; }
+.archivio-hero h1 em { color: #b7f24c; font-style: italic; }
+.archivio-main { max-width: var(--maxw, 900px); margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+/* MAPPA */
+.mappa-wrap { margin-bottom: 4rem; }
+.mappa-title { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(183,242,76,0.45); margin-bottom: 1.5rem; }
+.mappa-svg-wrap { position: relative; background: rgba(183,242,76,0.03); border: 0.5px solid rgba(183,242,76,0.1); overflow: hidden; }
+.mappa-svg-wrap svg { width: 100%; height: auto; display: block; }
+.pin { cursor: pointer; transition: transform 0.15s; transform-origin: center; }
+.pin:hover { transform: scale(1.15); }
+.pin circle { transition: fill 0.15s; }
+.pin:hover circle { fill: #b7f24c; }
+.pin text { pointer-events: none; font-family: 'Space Mono', monospace; font-weight: 700; }
+.pin--active circle { fill: #b7f24c !important; }
+.pin--active text { fill: #070d08 !important; }
+.mappa-legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.mappa-legend-item { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: rgba(183,242,76,0.5); cursor: pointer; padding: 4px 10px; border: 0.5px solid rgba(183,242,76,0.1); transition: all 0.15s; }
+.mappa-legend-item:hover, .mappa-legend-item.active { border-color: rgba(183,242,76,0.4); color: #b7f24c; }
+
+.archivio-filters { margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.archivio-count { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(183,242,76,0.4); margin-bottom: 1.5rem; }
+</style>
+</head>
+<body>
+<div class="fx fx--vignette" aria-hidden="true"></div>
+<div class="fx fx--noise" aria-hidden="true"></div>
+
+<nav class="nav" id="nav">
+  <a class="nav__brand" href="index.html">
+    <span class="nav__dot"></span>
+    THE&nbsp;LONG&nbsp;SHOT <span class="nav__sub">·&nbsp;MILANO&nbsp;2075</span>
+  </a>
+  <a class="nav__cta" href="index.html#invia">Invia la tua visione</a>
+</nav>
+
+<div class="archivio-hero">
+  <div class="eyebrow eyebrow--dot">L'archivio completo</div>
+  <h1>Le visioni dei <em>milanesi</em>.</h1>
+</div>
+
+<div class="archivio-main">
+
+  <!-- MAPPA -->
+  <div class="mappa-wrap">
+    <div class="mappa-title">Mappa delle visioni per zona</div>
+    <div class="mappa-svg-wrap">
+      <svg viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" id="mappa-svg">
+        <!-- sfondo -->
+        <rect width="600" height="500" fill="#0a120a"/>
+        <!-- griglia leggera -->
+        <line x1="0" y1="250" x2="600" y2="250" stroke="rgba(183,242,76,0.05)" stroke-width="1"/>
+        <line x1="300" y1="0" x2="300" y2="500" stroke="rgba(183,242,76,0.05)" stroke-width="1"/>
+        <!-- cerchi concentrici stile mappa -->
+        <circle cx="300" cy="250" r="60" fill="none" stroke="rgba(183,242,76,0.06)" stroke-width="1"/>
+        <circle cx="300" cy="250" r="120" fill="none" stroke="rgba(183,242,76,0.05)" stroke-width="1"/>
+        <circle cx="300" cy="250" r="190" fill="none" stroke="rgba(183,242,76,0.04)" stroke-width="1"/>
+        <!-- label Milano -->
+        <text x="300" y="254" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="rgba(183,242,76,0.2)" letter-spacing="3">MILANO</text>
+
+        <!-- PIN: Centro -->
+        <g class="pin" data-zona="centro" transform="translate(300,250)">
+          <circle r="20" fill="rgba(183,242,76,0.15)" stroke="#b7f24c" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="#b7f24c">0</text>
+          <title>Centro</title>
+        </g>
+        <!-- PIN: Nord-est -->
+        <g class="pin" data-zona="nord-est" transform="translate(390,145)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Nord-est</title>
+        </g>
+        <!-- PIN: Est -->
+        <g class="pin" data-zona="est" transform="translate(445,260)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Est</title>
+        </g>
+        <!-- PIN: Sud-est -->
+        <g class="pin" data-zona="sud-est" transform="translate(400,365)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Sud-est</title>
+        </g>
+        <!-- PIN: Sud -->
+        <g class="pin" data-zona="sud" transform="translate(300,430)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Sud</title>
+        </g>
+        <!-- PIN: Sud-ovest -->
+        <g class="pin" data-zona="sud-ovest" transform="translate(195,380)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Sud-ovest</title>
+        </g>
+        <!-- PIN: Ovest -->
+        <g class="pin" data-zona="ovest" transform="translate(150,255)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Ovest</title>
+        </g>
+        <!-- PIN: Nord-ovest -->
+        <g class="pin" data-zona="nord-ovest" transform="translate(185,140)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Nord-ovest</title>
+        </g>
+        <!-- PIN: Nord -->
+        <g class="pin" data-zona="nord" transform="translate(300,80)">
+          <circle r="18" fill="rgba(183,242,76,0.1)" stroke="rgba(183,242,76,0.4)" stroke-width="0.5"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" fill="rgba(183,242,76,0.8)">0</text>
+          <title>Nord</title>
+        </g>
+
+        <!-- label zone -->
+        <text x="300" y="208" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.25)" letter-spacing="1">CENTRO</text>
+        <text x="415" y="118" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">NORD-EST</text>
+        <text x="478" y="258" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">EST</text>
+        <text x="438" y="395" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">SUD-EST</text>
+        <text x="300" y="462" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">SUD</text>
+        <text x="148" y="410" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">SUD-OVEST</text>
+        <text x="98" y="258" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">OVEST</text>
+        <text x="130" y="118" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">NORD-OVEST</text>
+        <text x="300" y="50" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(183,242,76,0.2)" letter-spacing="1">NORD</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- FILTRI -->
+  <div class="archivio-filters">
+    <div class="filter-group">
+      <span class="filter-label">Tema</span>
+      <div class="filter-btns" id="filter-tema">
+        <button class="filter-btn active" data-value="">Tutti</button>
+        <button class="filter-btn" data-value="Mobilità e trasporti">Mobilità</button>
+        <button class="filter-btn" data-value="Spazio pubblico e verde">Verde</button>
+        <button class="filter-btn" data-value="Abitare e costo della vita">Abitare</button>
+        <button class="filter-btn" data-value="Cultura e identità">Cultura</button>
+        <button class="filter-btn" data-value="Economia e lavoro">Economia</button>
+        <button class="filter-btn" data-value="Comunità e periferie">Comunità</button>
+        <button class="filter-btn" data-value="Clima e ambiente">Clima</button>
+        <button class="filter-btn" data-value="Istituzioni e democrazia">Istituzioni</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Zona</span>
+      <div class="filter-btns" id="filter-zona">
+        <button class="filter-btn active" data-value="">Tutte</button>
+        <button class="filter-btn" data-value="centro">Centro</button>
+        <button class="filter-btn" data-value="nord-est">Nord-est</button>
+        <button class="filter-btn" data-value="est">Est</button>
+        <button class="filter-btn" data-value="sud-est">Sud-est</button>
+        <button class="filter-btn" data-value="sud">Sud</button>
+        <button class="filter-btn" data-value="sud-ovest">Sud-ovest</button>
+        <button class="filter-btn" data-value="ovest">Ovest</button>
+        <button class="filter-btn" data-value="nord-ovest">Nord-ovest</button>
+        <button class="filter-btn" data-value="nord">Nord</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="archivio-count" id="arch-count-label">Caricamento...</div>
+  <div class="visions" id="visions-container">
+    <div class="visions__loading">Caricamento visioni…</div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer__brand"><span class="footer__dot"></span>THE LONG SHOT · MILAN · EST. 2024</div>
+  <div class="footer__note"><a href="index.html" style="color:rgba(183,242,76,0.4);text-decoration:none">← Torna alla home</a></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = 'https://oqdszxrltgcptinkefjn.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_0Hjh4fs3JY5SkNDC2qBUCg_Ubl44hls';
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+var ZONE_MAP = {
+  'centro': ['Duomo / Centro Storico','Brera','Castello / Cairoli','Repubblica / Porta Nuova'],
+  'nord-est': ['Isola / Garibaldi','Centrale / Stazione','Porta Venezia / Buenos Aires','NoLo / Loreto','Greco / Turro','Crescenzago / Adriano','Maggiolina'],
+  'est': ['Città Studi / Lambrate','Ortica / Casoretto','Cimiano / Feltre','Naviglio Martesana'],
+  'sud-est': ['Porta Romana','Lodi / Corvetto','Rogoredo / Santa Giulia','Vigentino / Chiaravalle'],
+  'sud': ['Navigli / Darsena / Ticinese','Porta Genova / Tortona','Barona','Gratosoglio / Stadera'],
+  'sud-ovest': ['Giambellino / Lorenteggio','Famagosta / Bisceglie','San Siro / Ippodromo'],
+  'ovest': ['De Angeli / Wagner','Sempione / Fiera','CityLife / Portello','QT8 / Monte Stella','Gallaratese / Bonola'],
+  'nord-ovest': ['Chinatown / Sarpi','Bovisa / Dergano','Certosa / Quarto Oggiaro','Vialba / Affori / Comasina'],
+  'nord': ['Niguarda / Ca Granda','Bicocca','Zara / Maciachini','Bruzzano / Parco Nord']
+};
+
+var tutteLeVisioni = [];
+var filtroTema = '';
+var filtroZona = '';
+var nav = document.getElementById('nav');
+window.addEventListener('scroll', function() { if (nav) nav.classList.toggle('is-solid', window.scrollY > 56); }, { passive: true });
+
+function zonaPerQuartiere(q) {
+  for (var z in ZONE_MAP) {
+    if (ZONE_MAP[z].indexOf(q) !== -1) return z;
+  }
+  return null;
+}
+
+function aggiornaMappa(visioni) {
+  var conteggi = {};
+  visioni.forEach(function(v) {
+    var z = zonaPerQuartiere(v.quartiere);
+    if (z) conteggi[z] = (conteggi[z] || 0) + 1;
+  });
+  document.querySelectorAll('.pin').forEach(function(pin) {
+    var zona = pin.dataset.zona;
+    var n = conteggi[zona] || 0;
+    var txt = pin.querySelector('text');
+    var circ = pin.querySelector('circle');
+    if (txt) txt.textContent = n;
+    if (n > 0) {
+      circ.setAttribute('fill', 'rgba(183,242,76,0.25)');
+      circ.setAttribute('stroke', '#b7f24c');
+      txt.setAttribute('fill', '#b7f24c');
+    } else {
+      circ.setAttribute('fill', 'rgba(183,242,76,0.06)');
+      circ.setAttribute('stroke', 'rgba(183,242,76,0.2)');
+      txt.setAttribute('fill', 'rgba(183,242,76,0.4)');
+    }
+  });
+}
+
+function renderCards(visioni) {
+  var container = document.getElementById('visions-container');
+  var label = document.getElementById('arch-count-label');
+  if (label) label.textContent = visioni.length + ' visioni pubblicate';
+  if (!visioni.length) {
+    container.innerHTML = '<p class="visions__empty">Nessuna visione per questa selezione.</p>';
+    return;
+  }
+  container.innerHTML = visioni.map(function(v, i) {
+    var autore = (v.nome || 'Anonimo') + (v.quartiere ? ' · ' + v.quartiere : '');
+    var num = String(i + 1).padStart(2, '0');
+    var thumb = v.immagine_url ? '<div class="vision__thumb"><img src="' + v.immagine_url + '" alt=""></div>' : '';
+    return '<a class="vision vision--link" href="visione.html?id=' + v.id + '">' +
+      '<div class="vision__head"><span class="vision__tag">' + (v.tema||'Visione') + '</span><span class="vision__num">&#8470;&nbsp;' + num + '</span></div>' +
+      thumb +
+      '<p class="vision__text">' + v.testo.substring(0, 140) + (v.testo.length > 140 ? '&hellip;' : '') + '</p>' +
+      '<div class="vision__meta"><span class="vision__author">' + autore + '</span><span class="vision__year">&#8594; 2075</span></div>' +
+      '</a>';
+  }).join('');
+}
+
+function applicaFiltri() {
+  var filtrate = tutteLeVisioni.filter(function(v) {
+    var okTema = !filtroTema || v.tema === filtroTema;
+    var okZona = !filtroZona || (ZONE_MAP[filtroZona] && ZONE_MAP[filtroZona].indexOf(v.quartiere) !== -1);
+    return okTema && okZona;
+  });
+  renderCards(filtrate);
+}
+
+/* filtri */
+document.getElementById('filter-tema').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn'); if (!btn) return;
+  document.querySelectorAll('#filter-tema .filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active'); filtroTema = btn.dataset.value; applicaFiltri();
+});
+document.getElementById('filter-zona').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn'); if (!btn) return;
+  document.querySelectorAll('#filter-zona .filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active'); filtroZona = btn.dataset.value; applicaFiltri();
+});
+
+/* click su pin mappa */
+document.querySelectorAll('.pin').forEach(function(pin) {
+  pin.addEventListener('click', function() {
+    var zona = pin.dataset.zona;
+    var btn = document.querySelector('#filter-zona .filter-btn[data-value="' + zona + '"]');
+    if (btn) btn.click();
+    document.getElementById('visions-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* carica */
+sb.from('visioni').select('id,nome,quartiere,tema,testo,immagine_url,created_at')
+  .eq('approvata', true).order('created_at', { ascending: false })
+  .then(function(res) {
+    tutteLeVisioni = res.data || [];
+    aggiornaMappa(tutteLeVisioni);
+    applicaFiltri();
+  });
+</script>
+</body>
+</html>

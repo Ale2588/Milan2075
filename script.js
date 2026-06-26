@@ -154,13 +154,17 @@
   var visionsContainer = document.getElementById('visions-container');
   var archCount = document.getElementById('arch-count');
 
+  var MAX_HOME_CARDS = 6;
+  var isArchivioPage = window.location.pathname.indexOf('archivio') !== -1;
+
   function renderArchivio(visioni) {
     if (!visionsContainer) return;
     if (!visioni || !visioni.length) {
       visionsContainer.innerHTML = '<p class="visions__empty">Nessuna visione pubblicata ancora. Sii il primo.</p>';
       return;
     }
-    visionsContainer.innerHTML = visioni.map(function(v, i) {
+    var toShow = isArchivioPage ? visioni : visioni.slice(0, MAX_HOME_CARDS);
+    var html = toShow.map(function(v, i) {
       var autore = (v.nome || 'Anonimo') + (v.quartiere ? ' · ' + v.quartiere : '');
       var num = String(i + 1).padStart(2, '0');
       var thumb = v.immagine_url
@@ -173,6 +177,12 @@
         '<div class="vision__meta"><span class="vision__author">' + autore + '</span><span class="vision__year">&#8594; 2075</span></div>' +
         '</a>';
     }).join('');
+
+    if (!isArchivioPage && visioni.length > MAX_HOME_CARDS) {
+      html += '<a class="visions__more" href="archivio.html">Vedi tutte le ' + visioni.length + ' visioni &#8594;</a>';
+    }
+
+    visionsContainer.innerHTML = html;
     if (archCount) archCount.textContent = visioni.length;
   }
 

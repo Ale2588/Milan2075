@@ -335,3 +335,5 @@ img{ max-width:100%; display:block; }
 .filter-btn { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 0.5px solid rgba(183,242,76,0.15); color: rgba(183,242,76,0.4); padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
 .filter-btn:hover { border-color: rgba(183,242,76,0.4); color: rgba(183,242,76,0.7); }
 .filter-btn.active { background: rgba(183,242,76,0.12); border-color: rgba(183,242,76,0.5); color: #b7f24c; }
+.visions__more { grid-column: 1/-1; display: block; text-align: center; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lime, #b7f24c); text-decoration: none; padding: 1.5rem; border: 0.5px solid rgba(183,242,76,0.2); margin-top: 1px; transition: background 0.2s, border-color 0.2s; }
+.visions__more:hover { background: rgba(183,242,76,0.06); border-color: rgba(183,242,76,0.4); }
