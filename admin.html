@@ -154,7 +154,7 @@ body { background: var(--void); color: var(--text); font-family: 'Space Grotesk'
     carica();
   }
 
-  if (checkSession()) showBackoffice();
+  showBackoffice();
 
   loginBtn.addEventListener('click', function() {
     if (pwdInput.value === ADMIN_PASSWORD) {
