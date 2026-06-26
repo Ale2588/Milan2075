@@ -311,9 +311,8 @@
             showError('Errore nel salvataggio. Riprova.');
             if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Invia la tua visione \u2192'; }
           } else {
-            if (submitBtn) submitBtn.hidden = true;
             if (successBox) successBox.hidden = false;
-            visionCount += 1; setVisionDisplay(visionCount);
+            setTimeout(function() { location.reload(); }, 2000);
           }
         });
       }
