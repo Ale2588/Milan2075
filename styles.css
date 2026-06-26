@@ -182,7 +182,7 @@ img{ max-width:100%; display:block; }
 /* ---------- archivio ---------- */
 .archive{ position:relative; padding:clamp(4.5rem,9vw,7.5rem) var(--pad); border-top:1px solid var(--rule); overflow:hidden; }
 .archive__bg{ position:absolute; inset:0; z-index:0; background:url('archive.png') center / cover no-repeat; animation:haze 32s ease-in-out infinite; }
-.archive__veil{ position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom, #070D08 0%, rgba(7,13,8,0.84) 16%, rgba(7,13,8,0.82) 65%, #070D08 100%); }
+
 .archive__inner{ position:relative; z-index:2; max-width:var(--maxw); margin:0 auto; }
 .archive__head{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1.25rem; margin-bottom:2.75rem; }
 .archive__head .title{ margin-bottom:0; }
@@ -210,7 +210,7 @@ img{ max-width:100%; display:block; }
 /* ---------- form ---------- */
 .form-sec{ position:relative; border-top:1px solid var(--rule); overflow:hidden; }
 .form-sec__bg{ position:absolute; inset:0; z-index:0; background:url('form.png') center / cover no-repeat; animation:haze 34s ease-in-out infinite; }
-.form-sec__veil{ position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom, #070D08 0%, rgba(5,10,6,0.9) 14%, rgba(5,10,6,0.88) 100%); }
+
 .form-sec__inner{ position:relative; z-index:2; max-width:660px; margin:0 auto; padding:clamp(4.5rem,9vw,7.5rem) var(--pad); }
 .form-sec__sub{ font-size:16px; color:#b6cd97; margin:0 0 3rem; line-height:1.75; max-width:520px; }
 
@@ -294,8 +294,19 @@ img{ max-width:100%; display:block; }
 }
 
 /* =========================================================
-   NUOVI CAMPI FORM — upload immagine, consensi
+   ARCHIVIO DINAMICO + SCHEDA
    ========================================================= */
+.visions__loading { grid-column: 1/-1; text-align:center; padding:3rem; font-family:'Space Mono',monospace; font-size:11px; color:rgba(183,242,76,0.35); letter-spacing:0.1em; }
+.visions__empty { grid-column: 1/-1; text-align:center; padding:3rem; font-family:'Space Mono',monospace; font-size:11px; color:rgba(183,242,76,0.3); letter-spacing:0.08em; }
+.vision--link { text-decoration:none; cursor:pointer; display:block; }
+.vision--link:hover .vision__text { color:#e8f5d0; }
+.vision--link:hover { background:rgba(183,242,76,0.04); }
+.vision__thumb { margin: 0 0 1rem; overflow:hidden; max-height:140px; }
+.vision__thumb img { width:100%; height:140px; object-fit:cover; display:block; }
+.archive__veil { position:absolute; inset:0; z-index:1; background:rgba(7,13,8,0.62); }
+.form-sec__veil { position:absolute; inset:0; z-index:1; background:rgba(7,13,8,0.65); }
+
+/* Upload + consensi */
 .upload-area{position:relative;border:0.5px dashed rgba(183,242,76,0.25);background:rgba(183,242,76,0.03);transition:border-color 0.2s,background 0.2s;cursor:pointer;}
 .upload-area:hover{border-color:rgba(183,242,76,0.5);background:rgba(183,242,76,0.06);}
 .upload-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2;}
@@ -311,5 +322,5 @@ img{ max-width:100%; display:block; }
 .consent__box{flex-shrink:0;width:16px;height:16px;border:0.5px solid rgba(183,242,76,0.3);background:transparent;margin-top:2px;transition:background 0.15s,border-color 0.15s;position:relative;}
 .consent input[type="checkbox"]:checked + .consent__box{background:#b7f24c;border-color:#b7f24c;}
 .consent input[type="checkbox"]:checked + .consent__box::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #070d08;border-top:none;border-left:none;transform:rotate(45deg);}
-.consent__text{font-size:12px;color:rgba(232,245,208,0.55);line-height:1.65;transition:color 0.15s;}
+.consent__text{font-size:12px;color:rgba(232,245,208,0.55);line-height:1.65;}
 .consent:hover .consent__text{color:rgba(232,245,208,0.75);}

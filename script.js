@@ -142,46 +142,73 @@
     }
   }
 
-  /* ---------- 5. Form: conteggio parole, upload immagine, Supabase, invio ---------- */
-
-  // ————————————————————————————————
-  // SOSTITUISCI QUESTI DUE VALORI
+  /* ---------- 5. Supabase init ---------- */
   var SUPABASE_URL = 'https://oqdszxrltgcptinkefjn.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_0Hjh4fs3JY5SkNDC2qBUCg_Ubl44hls';
-  // ————————————————————————————————
 
   var sbClient = null;
-  try {
-    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  } catch(e) {
-    console.warn('Supabase non inizializzato:', e);
+  try { sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }
+  catch(e) { console.warn('Supabase non inizializzato:', e); }
+
+  /* ---------- 6. Carica archivio da Supabase ---------- */
+  var visionsContainer = document.getElementById('visions-container');
+  var archCount = document.getElementById('arch-count');
+
+  function renderArchivio(visioni) {
+    if (!visionsContainer) return;
+    if (!visioni || !visioni.length) {
+      visionsContainer.innerHTML = '<p class="visions__empty">Nessuna visione pubblicata ancora. Sii il primo.</p>';
+      return;
+    }
+    visionsContainer.innerHTML = visioni.map(function(v, i) {
+      var autore = (v.nome || 'Anonimo') + (v.quartiere ? ' · ' + v.quartiere : '');
+      var num = String(i + 1).padStart(2, '0');
+      var thumb = v.immagine_url
+        ? '<div class="vision__thumb"><img src="' + v.immagine_url + '" alt="immagine visione"></div>'
+        : '';
+      return '<a class="vision vision--link" href="visione.html?id=' + v.id + '">' +
+        '<div class="vision__head"><span class="vision__tag">' + (v.tema || 'Visione') + '</span><span class="vision__num">&#8470;&nbsp;' + num + '</span></div>' +
+        thumb +
+        '<p class="vision__text">' + v.testo.substring(0, 140) + (v.testo.length > 140 ? '&hellip;' : '') + '</p>' +
+        '<div class="vision__meta"><span class="vision__author">' + autore + '</span><span class="vision__year">&#8594; 2075</span></div>' +
+        '</a>';
+    }).join('');
+    if (archCount) archCount.textContent = visioni.length;
   }
 
+  function caricaArchivio() {
+    if (!sbClient) { if (visionsContainer) visionsContainer.innerHTML = '<p class="visions__empty">Errore connessione.</p>'; return; }
+    sbClient.from('visioni').select('id,nome,quartiere,tema,testo,immagine_url,created_at')
+      .eq('approvata', true)
+      .order('created_at', { ascending: false })
+      .then(function(res) {
+        if (res.error) { console.error(res.error); return; }
+        renderArchivio(res.data);
+      });
+  }
+
+  caricaArchivio();
+
+  /* ---------- 7. Form ---------- */
   var form = document.getElementById('vision-form');
   var textarea = document.getElementById('visione');
   var wordcount = document.getElementById('wordcount');
   var errorBox = document.getElementById('form-error');
   var submitBtn = document.getElementById('submit-btn');
   var successBox = document.getElementById('form-success');
-  var MAX_WORDS = 150;
-  var MIN_WORDS = 10;
-  var MAX_IMG_MB = 5;
+  var MAX_WORDS = 150, MIN_WORDS = 10, MAX_IMG_MB = 5;
 
-  function countWords(s) {
-    s = s.trim();
-    return s === '' ? 0 : s.split(/\s+/).length;
-  }
+  function countWords(s) { s = s.trim(); return s === '' ? 0 : s.split(/\s+/).length; }
 
   if (textarea && wordcount) {
-    textarea.addEventListener('input', function () {
+    textarea.addEventListener('input', function() {
       var w = countWords(textarea.value);
-      wordcount.textContent = w + ' / ' + MAX_WORDS + ' parole';
+      wordcount.textContent = w + ' / 150 parole';
       wordcount.classList.toggle('is-over', w > MAX_WORDS);
       if (errorBox) errorBox.hidden = true;
     });
   }
 
-  /* Upload immagine — anteprima */
   var imgInput = document.getElementById('immagine');
   var uploadArea = document.getElementById('upload-area');
   var placeholder = document.getElementById('upload-placeholder');
@@ -191,7 +218,7 @@
 
   function showPreview(file) {
     var reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = function(e) {
       if (previewImg) previewImg.src = e.target.result;
       if (placeholder) placeholder.hidden = true;
       if (preview) preview.hidden = false;
@@ -207,90 +234,64 @@
   }
 
   if (imgInput) {
-    imgInput.addEventListener('change', function () {
+    imgInput.addEventListener('change', function() {
       var file = imgInput.files && imgInput.files[0];
       if (!file) return;
-      if (file.size > MAX_IMG_MB * 1024 * 1024) {
-        showError("L'immagine supera i " + MAX_IMG_MB + "MB. Scegline una piu' leggera.");
-        clearPreview();
-        return;
-      }
+      if (file.size > MAX_IMG_MB * 1024 * 1024) { showError("Immagine troppo grande (max 5MB)."); clearPreview(); return; }
       showPreview(file);
     });
   }
 
-  if (removeBtn) {
-    removeBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      clearPreview();
-    });
-  }
+  if (removeBtn) removeBtn.addEventListener('click', function(e) { e.stopPropagation(); clearPreview(); });
 
   if (uploadArea) {
-    uploadArea.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      uploadArea.style.borderColor = 'rgba(183,242,76,0.6)';
-    });
-    uploadArea.addEventListener('dragleave', function () {
-      uploadArea.style.borderColor = '';
-    });
-    uploadArea.addEventListener('drop', function (e) {
-      e.preventDefault();
-      uploadArea.style.borderColor = '';
+    uploadArea.addEventListener('dragover', function(e) { e.preventDefault(); uploadArea.style.borderColor = 'rgba(183,242,76,0.6)'; });
+    uploadArea.addEventListener('dragleave', function() { uploadArea.style.borderColor = ''; });
+    uploadArea.addEventListener('drop', function(e) {
+      e.preventDefault(); uploadArea.style.borderColor = '';
       var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
       if (!file || !file.type.startsWith('image/')) return;
-      if (imgInput) {
-        var dt = new DataTransfer();
-        dt.items.add(file);
-        imgInput.files = dt.files;
-      }
+      if (imgInput) { var dt = new DataTransfer(); dt.items.add(file); imgInput.files = dt.files; }
       showPreview(file);
     });
   }
 
-  function showError(msg) {
-    if (!errorBox) return;
-    errorBox.textContent = 'E ' + msg;
-    errorBox.hidden = false;
-  }
+  function showError(msg) { if (!errorBox) return; errorBox.textContent = '⚠ ' + msg; errorBox.hidden = false; }
 
   if (form) {
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
       var w = countWords(textarea ? textarea.value : '');
-      if (w < MIN_WORDS) { showError('Scrivi almeno qualche riga — la tua visione conta.'); return; }
-      if (w > MAX_WORDS) { showError('La visione supera le 150 parole. Accorciala un po.'); return; }
-      if (!sbClient) { showError('Errore di connessione. Riprova tra poco.'); return; }
-
+      if (w < MIN_WORDS) { showError('Scrivi almeno qualche riga.'); return; }
+      if (w > MAX_WORDS) { showError('Supera le 150 parole.'); return; }
+      if (!sbClient) { showError('Errore di connessione.'); return; }
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Invio in corso...'; }
       if (errorBox) errorBox.hidden = true;
 
       var file = imgInput && imgInput.files && imgInput.files[0];
 
-      function salvaVisione(imgUrl) {
+      function salva(imgUrl) {
         var payload = {
-          nome: (document.getElementById('nome') || {}).value || null,
-          eta: parseInt((document.getElementById('eta') || {}).value) || null,
-          email: (document.getElementById('email') || {}).value || null,
-          telefono: (document.getElementById('telefono') || {}).value || null,
-          quartiere: (document.getElementById('quartiere') || {}).value || null,
-          tema: (document.getElementById('tema') || {}).value || null,
+          nome: (document.getElementById('nome')||{}).value || null,
+          eta: parseInt((document.getElementById('eta')||{}).value) || null,
+          email: (document.getElementById('email')||{}).value || null,
+          telefono: (document.getElementById('telefono')||{}).value || null,
+          quartiere: (document.getElementById('quartiere')||{}).value || null,
+          tema: (document.getElementById('tema')||{}).value || null,
           testo: textarea.value.trim(),
           immagine_url: imgUrl || null,
-          consent_community: !!(document.getElementById('consent-community') || {}).checked,
-          consent_followup: !!(document.getElementById('consent-followup') || {}).checked,
+          consent_community: !!((document.getElementById('consent-community')||{}).checked),
+          consent_followup: !!((document.getElementById('consent-followup')||{}).checked),
           approvata: false
         };
-
         sbClient.from('visioni').insert(payload).then(function(res) {
           if (res.error) {
             showError('Errore nel salvataggio. Riprova.');
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Invia la tua visione →'; }
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Invia la tua visione \u2192'; }
           } else {
             if (submitBtn) submitBtn.hidden = true;
             if (successBox) successBox.hidden = false;
-            visionCount += 1;
-            setVisionDisplay(visionCount);
+            visionCount += 1; setVisionDisplay(visionCount);
           }
         });
       }
@@ -299,15 +300,11 @@
         var ext = file.name.split('.').pop();
         var path = 'visione-' + Date.now() + '.' + ext;
         sbClient.storage.from('visioni-immagini').upload(path, file, { upsert: false }).then(function(res) {
-          if (res.error) {
-            salvaVisione(null);
-          } else {
-            var pub = sbClient.storage.from('visioni-immagini').getPublicUrl(path);
-            salvaVisione(pub.data.publicUrl);
-          }
+          var imgUrl = res.error ? null : sbClient.storage.from('visioni-immagini').getPublicUrl(path).data.publicUrl;
+          salva(imgUrl);
         });
       } else {
-        salvaVisione(null);
+        salva(null);
       }
     });
   }

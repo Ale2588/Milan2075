@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visione — Milano 2075</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.scheda { max-width: 720px; margin: 0 auto; padding: 7rem 2rem 5rem; }
+.scheda__back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lime, #b7f24c); text-decoration: none; margin-bottom: 3rem; opacity: 0.7; transition: opacity 0.2s; }
+.scheda__back:hover { opacity: 1; }
+.scheda__tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime, #b7f24c); border: 0.5px solid rgba(183,242,76,0.35); padding: 4px 10px; margin-bottom: 2rem; }
+.scheda__testo { font-family: 'Instrument Serif', serif; font-size: clamp(20px, 2.5vw, 26px); line-height: 1.65; color: #e8f5d0; margin-bottom: 3rem; }
+.scheda__img { width: 100%; max-height: 480px; object-fit: cover; display: block; margin-bottom: 3rem; }
+.scheda__meta { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; padding: 2rem 0; border-top: 0.5px solid rgba(183,242,76,0.12); border-bottom: 0.5px solid rgba(183,242,76,0.12); margin-bottom: 2rem; }
+.scheda__field { display: flex; flex-direction: column; gap: 5px; }
+.scheda__label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(183,242,76,0.45); }
+.scheda__value { font-size: 14px; color: #e8f5d0; font-weight: 300; }
+.scheda__num { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(183,242,76,0.4); margin-bottom: 1rem; }
+.scheda__loading { text-align: center; padding: 8rem 2rem; font-family: 'Space Mono', monospace; font-size: 12px; color: rgba(183,242,76,0.4); letter-spacing: 0.1em; }
+.scheda__error { text-align: center; padding: 8rem 2rem; font-family: 'Space Mono', monospace; font-size: 12px; color: #e24b4a; }
+</style>
+</head>
+<body>
+<div class="fx fx--vignette" aria-hidden="true"></div>
+<div class="fx fx--noise" aria-hidden="true"></div>
+
+<nav class="nav" id="nav">
+  <a class="nav__brand" href="index.html">
+    <span class="nav__dot"></span>
+    THE&nbsp;LONG&nbsp;SHOT <span class="nav__sub">·&nbsp;MILANO&nbsp;2075</span>
+  </a>
+  <a class="nav__cta" href="index.html#invia">Invia la tua visione</a>
+</nav>
+
+<div class="scheda" id="scheda">
+  <div class="scheda__loading">Caricamento visione...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://oqdszxrltgcptinkefjn.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_0Hjh4fs3JY5SkNDC2qBUCg_Ubl44hls';
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var scheda = document.getElementById('scheda');
+
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id');
+
+  if (!id) {
+    scheda.innerHTML = '<div class="scheda__error">Visione non trovata.<br><a href="index.html" style="color:#b7f24c">← Torna all\'archivio</a></div>';
+    return;
+  }
+
+  sb.from('visioni').select('*').eq('id', id).eq('approvata', true).single().then(function(res) {
+    if (res.error || !res.data) {
+      scheda.innerHTML = '<div class="scheda__error">Visione non trovata o non ancora pubblicata.<br><a href="index.html" style="color:#b7f24c">← Torna all\'archivio</a></div>';
+      return;
+    }
+
+    var v = res.data;
+    var data = v.created_at ? new Date(v.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+
+    var img = v.immagine_url
+      ? '<img class="scheda__img" src="' + v.immagine_url + '" alt="Immagine della visione">'
+      : '';
+
+    document.title = (v.tema || 'Visione') + ' — Milano 2075';
+
+    scheda.innerHTML =
+      '<a class="scheda__back" href="index.html#visioni">← Torna all\'archivio</a>' +
+      '<div class="scheda__tag">' + (v.tema || 'Visione') + '</div>' +
+      img +
+      '<p class="scheda__testo">' + v.testo + '</p>' +
+      '<div class="scheda__meta">' +
+        campo('Autore', v.nome || 'Anonimo') +
+        campo('Quartiere', v.quartiere || '—') +
+        campo('Età', v.eta || '—') +
+        campo('Data', data) +
+      '</div>' +
+      '<a class="scheda__back" href="index.html#visioni">← Torna all\'archivio</a>';
+
+    /* nav scroll */
+    var nav = document.getElementById('nav');
+    window.addEventListener('scroll', function() {
+      if (nav) nav.classList.toggle('is-solid', window.scrollY > 56);
+    }, { passive: true });
+  });
+
+  function campo(label, val) {
+    return '<div class="scheda__field"><span class="scheda__label">' + label + '</span><span class="scheda__value">' + val + '</span></div>';
+  }
+})();
+</script>
+</body>
+</html>

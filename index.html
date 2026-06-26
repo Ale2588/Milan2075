@@ -85,37 +85,8 @@
       </div>
       <div class="arch-count"><span id="arch-count">47</span> visioni pubblicate</div>
     </div>
-    <div class="visions">
-      <article class="vision">
-        <div class="vision__head"><span class="vision__tag">Mobilità</span><span class="vision__num">№ 01</span></div>
-        <p class="vision__text">Milano senza automobile privata entro il 2050. Non per divieto, ma perché il trasporto pubblico sarà talmente buono da rendere l'auto un peso, non un privilegio.</p>
-        <div class="vision__meta"><span class="vision__author">M.R. · Porta Romana</span><span class="vision__year">→ 2075</span></div>
-      </article>
-      <article class="vision">
-        <div class="vision__head"><span class="vision__tag">Spazio pubblico</span><span class="vision__num">№ 02</span></div>
-        <p class="vision__text">Il verde non come ornamento ma come infrastruttura. Ogni quartiere con il suo bosco urbano, ogni cortile come polmone. Una città che respira anche d'estate.</p>
-        <div class="vision__meta"><span class="vision__author">S.B. · Isola</span><span class="vision__year">→ 2075</span></div>
-      </article>
-      <article class="vision">
-        <div class="vision__head"><span class="vision__tag">Cultura</span><span class="vision__num">№ 03</span></div>
-        <p class="vision__text">Una città dove le istituzioni culturali non competono con Amsterdam o Londra, ma diventano il modello. Il talento viene qui perché qui si costruisce.</p>
-        <div class="vision__meta"><span class="vision__author">A.C. · Brera</span><span class="vision__year">→ 2075</span></div>
-      </article>
-      <article class="vision">
-        <div class="vision__head"><span class="vision__tag">Abitare</span><span class="vision__num">№ 04</span></div>
-        <p class="vision__text">Una città in cui si può crescere, invecchiare e tornare senza dover emigrare per il costo della vita. L'accessibilità come scelta urbanistica, non come welfare.</p>
-        <div class="vision__meta"><span class="vision__author">F.M. · Corvetto</span><span class="vision__year">→ 2075</span></div>
-      </article>
-      <article class="vision">
-        <div class="vision__head"><span class="vision__tag">Economia</span><span class="vision__num">№ 05</span></div>
-        <p class="vision__text">Milano come laboratorio europeo per il lavoro post-industriale. La città che produce idee diventa anche la città che le realizza.</p>
-        <div class="vision__meta"><span class="vision__author">L.V. · Bicocca</span><span class="vision__year">→ 2075</span></div>
-      </article>
-      <article class="vision">
-        <div class="vision__head"><span class="vision__tag">Comunità</span><span class="vision__num">№ 06</span></div>
-        <p class="vision__text">Milano ritrova i suoi quartieri come unità di senso. Non periferie da integrare ma comunità da riconoscere. La città policentrica è già qui.</p>
-        <div class="vision__meta"><span class="vision__author">G.T. · Niguarda</span><span class="vision__year">→ 2075</span></div>
-      </article>
+    <div class="visions" id="visions-container">
+      <div class="visions__loading">Caricamento visioni…</div>
     </div>
   </div>
 </section>
@@ -130,8 +101,6 @@
     <p class="form-sec__sub">Non serve una risposta completa. Basta un pensiero onesto su dove vorremmo arrivare — e il coraggio di scriverlo.</p>
 
     <form id="vision-form" novalidate>
-
-      <!-- IDENTITÀ -->
       <div class="field-row">
         <div class="field">
           <label for="nome">Nome (opzionale)</label>
@@ -142,18 +111,6 @@
           <input id="eta" name="eta" type="number" min="14" max="99" placeholder="Es. 34">
         </div>
       </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="email">Email <span class="field__hint">(opzionale)</span></label>
-          <input id="email" name="email" type="email" placeholder="la.tua@email.com">
-        </div>
-        <div class="field">
-          <label for="telefono">Telefono <span class="field__hint">(opzionale)</span></label>
-          <input id="telefono" name="telefono" type="tel" placeholder="+39 333 000 0000">
-        </div>
-      </div>
-
-      <!-- VISIONE -->
       <div class="field">
         <label for="quartiere">Quartiere di Milano</label>
         <select id="quartiere" name="quartiere">
@@ -173,37 +130,6 @@
         <textarea id="visione" name="visione" placeholder="Scrivi qui la tua idea su come potrebbe — o dovrebbe — essere Milano tra cinquant'anni."></textarea>
         <div class="wordcount" id="wordcount">0 / 150 parole</div>
       </div>
-
-      <!-- IMMAGINE -->
-      <div class="field">
-        <label for="immagine">Immagine di accompagnamento <span class="field__hint">(opzionale · jpg/png/webp · max 5mb)</span></label>
-        <div class="upload-area" id="upload-area">
-          <input id="immagine" name="immagine" type="file" accept="image/jpeg,image/png,image/webp" class="upload-input">
-          <div class="upload-placeholder" id="upload-placeholder">
-            <span class="upload-icon">⊕</span>
-            <span>Trascina un'immagine o clicca per sceglierla</span>
-          </div>
-          <div class="upload-preview" id="upload-preview" hidden>
-            <img id="preview-img" src="" alt="Anteprima">
-            <button type="button" class="upload-remove" id="upload-remove">✕ Rimuovi</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CONSENSI -->
-      <div class="consents">
-        <label class="consent">
-          <input type="checkbox" id="consent-community" name="consent_community" value="1">
-          <span class="consent__box"></span>
-          <span class="consent__text">Accetto di essere inserito nei canali della community The Long Shot (Substack e WhatsApp) per ricevere aggiornamenti sul progetto Milano 2075 e sulle attività future.</span>
-        </label>
-        <label class="consent">
-          <input type="checkbox" id="consent-followup" name="consent_followup" value="1">
-          <span class="consent__box"></span>
-          <span class="consent__text">Acconsento a essere ricontattato dalla redazione di The Long Shot qualora la mia visione venga selezionata per approfondimento o dibattito.</span>
-        </label>
-      </div>
-
       <div class="form-error" id="form-error" hidden></div>
       <button type="submit" class="btn--submit" id="submit-btn">Invia la tua visione →</button>
       <div class="form-success" id="form-success" hidden><span class="form-success__dot"></span>Grazie. La tua visione è ora parte dell'archivio.</div>
