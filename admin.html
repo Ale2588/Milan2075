@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backoffice — Milano 2075</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void: #070d08;
+  --void-2: #0e1a0f;
+  --void-3: #162018;
+  --lime: #b7f24c;
+  --lime-dim: #6ba828;
+  --amber: #eba94b;
+  --red: #e24b4a;
+  --text: #e8f5d0;
+  --text-dim: #7a9a5a;
+  --rule: rgba(183,242,76,0.1);
+}
+html { scroll-behavior: smooth; }
+body { background: var(--void); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 300; min-height: 100vh; }
+
+/* LOGIN */
+.login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.login__box { width: 100%; max-width: 380px; }
+.login__eyebrow { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lime-dim); margin-bottom: 1.5rem; }
+.login__title { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 2rem; letter-spacing: -0.02em; }
+.login__field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.login__field label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); }
+.login__field input { background: rgba(183,242,76,0.04); border: 0.5px solid rgba(183,242,76,0.2); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; padding: 11px 13px; outline: none; transition: border-color 0.2s; border-radius: 0; }
+.login__field input:focus { border-color: var(--lime); }
+.login__btn { width: 100%; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: var(--lime); color: var(--void); border: none; padding: 14px; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+.login__btn:hover { background: #d4f07a; }
+.login__error { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--red); margin-top: 1rem; display: none; }
+
+/* NAV */
+.nav { background: rgba(7,13,8,0.95); border-bottom: 0.5px solid var(--rule); padding: 0 2rem; height: 52px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav__brand { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--lime); }
+.nav__brand span { color: var(--text-dim); }
+.nav__logout { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); background: none; border: 0.5px solid var(--rule); padding: 6px 14px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.nav__logout:hover { color: var(--red); border-color: var(--red); }
+
+/* MAIN */
+.main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+.main__header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+.main__title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.main__title span { color: var(--lime); }
+.tabs { display: flex; gap: 2px; margin-bottom: 2rem; }
+.tab { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: var(--void-2); border: 0.5px solid var(--rule); color: var(--text-dim); padding: 8px 18px; cursor: pointer; transition: all 0.15s; }
+.tab.active { background: var(--lime); color: var(--void); border-color: var(--lime); }
+.tab:hover:not(.active) { border-color: var(--lime-dim); color: var(--text); }
+
+/* CARDS */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--rule); }
+.card { background: var(--void-2); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+.card__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.card__tag { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime); border: 0.5px solid rgba(183,242,76,0.3); padding: 3px 8px; }
+.card__date { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-dim); white-space: nowrap; }
+.card__testo { font-size: 14px; line-height: 1.65; color: var(--text); flex: 1; }
+.card__img { width: 100%; max-height: 160px; object-fit: cover; display: block; }
+.card__meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 0.75rem 0; border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+.card__field { display: flex; flex-direction: column; gap: 3px; }
+.card__label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(183,242,76,0.35); }
+.card__value { font-size: 12px; color: var(--text-dim); }
+.card__consents { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.card__consent { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.06em; padding: 3px 8px; border: 0.5px solid; }
+.card__consent--on { color: var(--lime); border-color: rgba(183,242,76,0.3); }
+.card__consent--off { color: var(--text-dim); border-color: var(--rule); opacity: 0.5; }
+.card__actions { display: flex; gap: 8px; }
+.btn-approve { flex: 1; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--lime); color: var(--void); border: none; padding: 10px; cursor: pointer; transition: background 0.2s; }
+.btn-approve:hover { background: #d4f07a; }
+.btn-approve:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-reject { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; color: var(--red); border: 0.5px solid rgba(226,75,74,0.3); padding: 10px 16px; cursor: pointer; transition: all 0.2s; }
+.btn-reject:hover { background: rgba(226,75,74,0.08); border-color: var(--red); }
+.btn-reject:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-unapprove { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; color: var(--text-dim); border: 0.5px solid var(--rule); padding: 10px 16px; cursor: pointer; transition: all 0.2s; }
+.btn-unapprove:hover { color: var(--amber); border-color: var(--amber); }
+
+.empty { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; }
+.loading { text-align: center; padding: 4rem 2rem; font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(183,242,76,0.35); letter-spacing: 0.1em; }
+.badge { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; background: rgba(183,242,76,0.12); color: var(--lime); padding: 2px 8px; border-radius: 2px; margin-left: 6px; }
+.badge--amber { background: rgba(235,169,75,0.12); color: var(--amber); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="login-screen">
+  <div class="login__box">
+    <div class="login__eyebrow">The Long Shot · Milano 2075</div>
+    <h1 class="login__title">Backoffice</h1>
+    <div class="login__field">
+      <label for="pwd">Password</label>
+      <input type="password" id="pwd" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login__btn" id="login-btn">Accedi →</button>
+    <div class="login__error" id="login-error">Password errata.</div>
+  </div>
+</div>
+
+<!-- BACKOFFICE -->
+<div id="backoffice" hidden>
+  <nav class="nav">
+    <div class="nav__brand">THE_LONG_SHOT <span>· BACKOFFICE</span></div>
+    <button class="nav__logout" id="logout-btn">Esci</button>
+  </nav>
+
+  <div class="main">
+    <div class="main__header">
+      <h1 class="main__title">Visioni <span id="pending-badge"></span></h1>
+      <a href="index.html" target="_blank" style="font-family:'Space Mono',monospace;font-size:10px;color:var(--lime-dim);text-decoration:none;letter-spacing:0.08em;">Vai al sito →</a>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="pending">In attesa <span class="badge" id="tab-pending-n">0</span></button>
+      <button class="tab" data-tab="approved">Pubblicate <span class="badge badge--amber" id="tab-approved-n">0</span></button>
+    </div>
+
+    <div id="cards-container" class="cards">
+      <div class="loading">Caricamento...</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://oqdszxrltgcptinkefjn.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_0Hjh4fs3JY5SkNDC2qBUCg_Ubl44hls';
+  var ADMIN_PASSWORD = 'tls2075';  // ← CAMBIA QUESTA PASSWORD
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var currentTab = 'pending';
+  var allData = { pending: [], approved: [] };
+
+  /* --- LOGIN --- */
+  var loginScreen = document.getElementById('login-screen');
+  var backoffice = document.getElementById('backoffice');
+  var loginBtn = document.getElementById('login-btn');
+  var loginError = document.getElementById('login-error');
+  var pwdInput = document.getElementById('pwd');
+  var logoutBtn = document.getElementById('logout-btn');
+
+  function checkSession() {
+    return sessionStorage.getItem('tls_admin') === '1';
+  }
+
+  function showBackoffice() {
+    loginScreen.hidden = true;
+    backoffice.hidden = false;
+    carica();
+  }
+
+  if (checkSession()) showBackoffice();
+
+  loginBtn.addEventListener('click', function() {
+    if (pwdInput.value === ADMIN_PASSWORD) {
+      sessionStorage.setItem('tls_admin', '1');
+      loginError.style.display = 'none';
+      showBackoffice();
+    } else {
+      loginError.style.display = 'block';
+      pwdInput.value = '';
+      pwdInput.focus();
+    }
+  });
+
+  pwdInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') loginBtn.click(); });
+
+  logoutBtn.addEventListener('click', function() {
+    sessionStorage.removeItem('tls_admin');
+    location.reload();
+  });
+
+  /* --- TABS --- */
+  document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      currentTab = tab.dataset.tab;
+      renderCards(allData[currentTab], currentTab);
+    });
+  });
+
+  /* --- CARICA --- */
+  function carica() {
+    var container = document.getElementById('cards-container');
+    container.innerHTML = '<div class="loading">Caricamento...</div>';
+
+    Promise.all([
+      sb.from('visioni').select('*').eq('approvata', false).order('created_at', { ascending: false }),
+      sb.from('visioni').select('*').eq('approvata', true).order('created_at', { ascending: false })
+    ]).then(function(results) {
+      allData.pending = results[0].data || [];
+      allData.approved = results[1].data || [];
+
+      document.getElementById('tab-pending-n').textContent = allData.pending.length;
+      document.getElementById('tab-approved-n').textContent = allData.approved.length;
+
+      renderCards(allData[currentTab], currentTab);
+    });
+  }
+
+  /* --- RENDER --- */
+  function renderCards(visioni, tab) {
+    var container = document.getElementById('cards-container');
+    if (!visioni.length) {
+      container.innerHTML = '<div class="empty">Nessuna visione ' + (tab === 'pending' ? 'in attesa' : 'pubblicata') + '.</div>';
+      return;
+    }
+    container.innerHTML = visioni.map(function(v) {
+      var data = new Date(v.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' });
+      var img = v.immagine_url ? '<img class="card__img" src="' + v.immagine_url + '" alt="">' : '';
+      var actions = tab === 'pending'
+        ? '<button class="btn-approve" data-id="' + v.id + '">✓ Approva</button><button class="btn-reject" data-id="' + v.id + '">✕ Elimina</button>'
+        : '<button class="btn-unapprove" data-id="' + v.id + '">↩ Rimuovi</button><button class="btn-reject" data-id="' + v.id + '">✕ Elimina</button>';
+
+      return '<div class="card" data-id="' + v.id + '">' +
+        '<div class="card__head"><span class="card__tag">' + (v.tema || '—') + '</span><span class="card__date">' + data + '</span></div>' +
+        img +
+        '<p class="card__testo">' + v.testo + '</p>' +
+        '<div class="card__meta">' +
+          field('Nome', v.nome || 'Anonimo') +
+          field('Quartiere', v.quartiere || '—') +
+          field('Età', v.eta || '—') +
+          field('Email', v.email || '—') +
+          field('Telefono', v.telefono || '—') +
+        '</div>' +
+        '<div class="card__consents">' +
+          consent('Substack / WhatsApp', v.consent_community) +
+          consent('Ricontatto', v.consent_followup) +
+        '</div>' +
+        '<div class="card__actions">' + actions + '</div>' +
+        '</div>';
+    }).join('');
+
+    /* eventi bottoni */
+    container.querySelectorAll('.btn-approve').forEach(function(btn) {
+      btn.addEventListener('click', function() { approva(btn.dataset.id, btn); });
+    });
+    container.querySelectorAll('.btn-reject').forEach(function(btn) {
+      btn.addEventListener('click', function() { elimina(btn.dataset.id, btn); });
+    });
+    container.querySelectorAll('.btn-unapprove').forEach(function(btn) {
+      btn.addEventListener('click', function() { rimuovi(btn.dataset.id, btn); });
+    });
+  }
+
+  function field(label, val) {
+    return '<div class="card__field"><span class="card__label">' + label + '</span><span class="card__value">' + val + '</span></div>';
+  }
+
+  function consent(label, val) {
+    return '<span class="card__consent ' + (val ? 'card__consent--on' : 'card__consent--off') + '">' + (val ? '✓' : '✗') + ' ' + label + '</span>';
+  }
+
+  function disableCard(btn) {
+    var card = btn.closest('.card');
+    card.querySelectorAll('button').forEach(function(b) { b.disabled = true; });
+    return card;
+  }
+
+  function approva(id, btn) {
+    var card = disableCard(btn);
+    sb.from('visioni').update({ approvata: true }).eq('id', id).then(function(res) {
+      if (!res.error) {
+        card.style.opacity = '0.4';
+        card.style.transition = 'opacity 0.3s';
+        setTimeout(function() { carica(); }, 400);
+      }
+    });
+  }
+
+  function rimuovi(id, btn) {
+    var card = disableCard(btn);
+    sb.from('visioni').update({ approvata: false }).eq('id', id).then(function(res) {
+      if (!res.error) {
+        card.style.opacity = '0.4';
+        card.style.transition = 'opacity 0.3s';
+        setTimeout(function() { carica(); }, 400);
+      }
+    });
+  }
+
+  function elimina(id, btn) {
+    if (!confirm('Eliminare definitivamente questa visione?')) return;
+    var card = disableCard(btn);
+    sb.from('visioni').delete().eq('id', id).then(function(res) {
+      if (!res.error) {
+        card.style.opacity = '0';
+        card.style.transition = 'opacity 0.3s';
+        setTimeout(function() { carica(); }, 400);
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
