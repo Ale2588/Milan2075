@@ -183,7 +183,29 @@
       .order('created_at', { ascending: false })
       .then(function(res) {
         if (res.error) { console.error(res.error); return; }
-        renderArchivio(res.data);
+        var data = res.data || [];
+        renderArchivio(data);
+
+        /* aggiorna contatori hero con dati reali */
+        var n = data.length;
+        var quartieri = new Set(data.map(function(v) { return v.quartiere; }).filter(Boolean));
+        visionCount = n;
+        animateCount(n, 1700);
+        var qEl = document.getElementById('qrt-count');
+        if (qEl) {
+          var from = 0, dur = 1700, start = performance.now();
+          var target = quartieri.size;
+          if (!reduceMotion) {
+            (function tick(now) {
+              var t = Math.min(1, (now - start) / dur);
+              var e = 1 - Math.pow(1 - t, 3);
+              qEl.textContent = Math.round(target * e);
+              if (t < 1) requestAnimationFrame(tick);
+            })(performance.now());
+          } else {
+            qEl.textContent = target;
+          }
+        }
       });
   }
 
